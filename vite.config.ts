@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
-  base: '/',
+  base: process.env.GITHUB_PAGES_PREVIEW === 'true' ? '/jarvis-fit/' : '/',
   plugins: [VitePWA({
     registerType: 'autoUpdate',
     includeAssets: ['icon.svg'],
@@ -12,9 +12,9 @@ export default defineConfig({
       theme_color: '#101827',
       background_color: '#101827',
       display: 'standalone',
-      scope: '/',
-      start_url: '/',
-      icons: [{src:'/icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any maskable'}]
+      scope: process.env.GITHUB_PAGES_PREVIEW === 'true' ? '/jarvis-fit/' : '/',
+      start_url: process.env.GITHUB_PAGES_PREVIEW === 'true' ? '/jarvis-fit/' : '/',
+      icons: [{src:process.env.GITHUB_PAGES_PREVIEW === 'true' ? '/jarvis-fit/icon.svg' : '/icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any maskable'}]
     }
   })]
 });

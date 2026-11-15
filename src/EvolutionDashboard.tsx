@@ -1,40 +1,25 @@
 import React from 'react';
 import {pace,summarize,type MetricSession} from './evolutionMetrics';
 
+const formatTime=(m:number)=>{const total=Math.round(m*60);return `${Math.floor(total/3600)}:${String(Math.floor(total%3600/60)).padStart(2,'0')}:${String(total%60).padStart(2,'0')}`};
 export default function EvolutionDashboard({sessions}:{sessions:MetricSession[]}){
- const {totalKm,totalMin,runMin,bestKm,weekly,last7,streak,best5,best10,runs}=summarize(sessions);
+ const {done,totalKm,totalMin,runMin,bestKm,weekly,last7,streak,best5,best10,runs}=summarize(sessions);
  const maxWeekly=Math.max(1,...weekly.map(x=>x.km));
  const stats=[
-  {label:'Distância acumulada',value:totalKm.toFixed(2),unit:'km',accent:'#60a5fa'},
-  {label:'Últimos 7 dias',value:last7.toFixed(2),unit:'km',accent:'#a3e635'},
-  {label:'Ritmo médio',value:pace(runMin,totalKm),unit:'',accent:'#c4b5fd'},
-  {label:'Tempo de treino',value:String(totalMin),unit:'min',accent:'#fbbf24'},
-  {label:'Sequência atual',value:String(streak),unit:'dias',accent:'#fb7185'},
-  {label:'Maior corrida',value:bestKm.toFixed(2),unit:'km',accent:'#2dd4bf'}
+  {label:'Distância total',value:totalKm.toFixed(2)+' km',icon:'📍'},
+  {label:'Tempo de treino',value:formatTime(totalMin),icon:'◷'},
+  {label:'Treinos',value:String(done.length),icon:'▦'},
+  {label:'Sequência',value:streak+' dias',icon:'🔥'}
  ];
- return <section aria-label="Dashboard de evolução">
-  <div style={{display:'flex',justifyContent:'space-between',alignItems:'start',gap:12,flexWrap:'wrap'}}>
-   <div><p className="muted" style={{marginBottom:4}}>SEU DESEMPENHO</p><h2 style={{marginTop:0}}>Evolução das corridas</h2></div>
-   <span className="tag">{runs.length} corridas registradas</span>
-  </div>
-  <p className="muted">Dados dos treinos concluídos. O GPS Android será integrado em uma etapa posterior.</p>
-  <div className="stats">{stats.map(s=><div key={s.label} style={{borderTop:`3px solid ${s.accent}`}}><span>{s.label}</span><b>{s.value}{s.unit&&<small> {s.unit}</small>}</b></div>)}</div>
-  <h3>Distância diária · últimos 7 dias</h3>
-  <div role="img" aria-label="Gráfico de distância em quilômetros nos últimos sete dias" style={{display:'flex',alignItems:'end',gap:8,height:174,marginBottom:18,padding:'12px 0'}}>
-   {weekly.map(x=><div key={x.date} title={`${x.date}: ${x.km.toFixed(2)} km`} style={{flex:1,minWidth:0,textAlign:'center',fontSize:11,display:'flex',flexDirection:'column',justifyContent:'end',height:'100%'}}>
-    <span style={{marginBottom:5}}>{x.km>0?x.km.toFixed(1):'—'}</span>
-    <div style={{height:`${Math.max(4,100*x.km/maxWeekly)}px`,background:'#a3ec61',borderRadius:'6px 6px 2px 2px'}}/>
-    <span style={{marginTop:6}}>{x.date.slice(5)}</span>
-   </div>)}
-  </div>
-  <h3>Metas atuais</h3>
-  <div style={{display:'flex',justifyContent:'space-between',gap:12}}><span>Maior corrida contínua</span><b>{bestKm.toFixed(2)} / 10 km</b></div>
-  <div className="progress" role="progressbar" aria-label="Meta de corrida contínua" aria-valuenow={Math.min(100,Math.round(bestKm/10*100))} aria-valuemin={0} aria-valuemax={100}><div style={{width:`${Math.min(100,bestKm/10*100)}%`}}/></div>
-  <div style={{display:'flex',justifyContent:'space-between',gap:12,marginTop:14}}><span>Volume dos últimos 7 dias</span><b>{last7.toFixed(2)} / 15 km</b></div>
-  <div className="progress" role="progressbar" aria-label="Meta de distância nos últimos sete dias" aria-valuenow={Math.min(100,Math.round(last7/15*100))} aria-valuemin={0} aria-valuemax={100}><div style={{width:`${Math.min(100,last7/15*100)}%`}}/></div>
-  <p className="muted">As metas de 10 km e 15 km ainda são valores iniciais; personalização será uma entrega separada.</p>
-  <h3>Recordes pessoais</h3>
-  <div className="stats"><div><span>Melhor 5 km</span><b>{best5===null?'—':`${best5.toFixed(1)} min`}</b></div><div><span>Melhor 10 km</span><b>{best10===null?'—':`${best10.toFixed(1)} min`}</b></div></div>
-  <p className="muted">Recordes consideram apenas corridas completas próximas de 5 ou 10 km; não calculam parciais.</p>
- </section>;
+ return <div className="evoPremium" aria-label="Dashboard de evolução">
+  <div className="evoTitle"><div><span className="evoKicker">✦ SEU DESEMPENHO</span><h2>Evolução</h2></div><span className="tag">{runs.length} corridas</span></div>
+  <div className="evoTabs"><span className="selected">Geral</span><span>Corrida</span><span>CrossFit</span></div>
+  <div className="evoStatGrid">{stats.map(s=><article key={s.label} className="evoStat"><span>{s.icon} {s.label}</span><strong>{s.value}</strong></article>)}</div>
+  <section className="evoPanel"><div className="evoPanelHead"><h3>Distância por dia</h3><small>Últimos 7 dias</small></div><div className="evoChart" role="img" aria-label="Distância diária percorrida nos últimos sete dias">
+   {weekly.map(x=><div className="evoBarCol" key={x.date} title={`${x.date}: ${x.km.toFixed(2)} km`}><span>{x.km?x.km.toFixed(1):'0'}</span><div className="evoBarTrack"><div className="evoBar" style={{height:`${x.km?Math.max(5,100*x.km/maxWeekly):0}%`}}/></div><small>{x.date.slice(5)}</small></div>)}
+  </div><p className="muted">Distâncias registradas em treinos concluídos; dias sem registro aparecem zerados.</p></section>
+  <section className="evoPanel"><h3>Metas</h3><div className="evoGoal"><div><span>Maior corrida contínua</span><b>{bestKm.toFixed(2)} / 10 km</b></div><div className="evoProgress" role="progressbar" aria-label="Meta de corrida contínua" aria-valuenow={Math.min(100,Math.round(bestKm/10*100))} aria-valuemin={0} aria-valuemax={100}><span style={{width:`${Math.min(100,bestKm/10*100)}%`}}/></div></div><div className="evoGoal"><div><span>Distância nos últimos 7 dias</span><b>{last7.toFixed(2)} / 15 km</b></div><div className="evoProgress blue" role="progressbar" aria-label="Meta semanal" aria-valuenow={Math.min(100,Math.round(last7/15*100))} aria-valuemin={0} aria-valuemax={100}><span style={{width:`${Math.min(100,last7/15*100)}%`}}/></div></div><p className="muted">Metas iniciais de referência, ainda não personalizáveis.</p></section>
+  <section className="evoPanel"><h3>Recordes pessoais 🏆</h3><div className="evoRecords"><div><span>5 km</span><strong>{best5===null?'Sem registro':formatTime(best5)}</strong></div><div><span>10 km</span><strong>{best10===null?'Sem registro':formatTime(best10)}</strong></div></div><p className="muted">Somente corridas completas registradas próximas de 5 km ou 10 km. Não calculamos parciais.</p></section>
+  <section className="evoPanel"><h3>Ritmo médio</h3><strong className="evoPace">{pace(runMin,totalKm)}</strong><p className="muted">Calculado a partir das corridas registradas. GPS em tempo real fica para uma etapa futura.</p></section>
+ </div>;
 }

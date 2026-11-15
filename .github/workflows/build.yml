@@ -1,9 +1,9 @@
 name: Build and deploy PWA
 on:
   push:
-    branches: [main]
+    branches: [main, feat/pwa-initial]
   pull_request:
-    branches: [main]
+    branches: [main, feat/pwa-initial]
   workflow_dispatch:
 permissions:
   contents: read

@@ -31,7 +31,7 @@ function App(){
  useEffect(()=>{load().then(s=>setState(s??makeInitial())).catch(()=>setImportError('Armazenamento indisponível neste navegador.'))},[]);
  useEffect(()=>{if(state)save(state).catch(()=>setImportError('Não foi possível salvar os dados.'))},[state]);
  if(!state)return <main>Carregando Jarvis Fit…</main>;
- const update=(fn:(s:State)=>State)=>setState(fn);
+ const update=(fn:(s:State)=>State)=>setState(prev=>prev?fn(prev):prev);
  const high=state.fatigue>=7||state.soreness>=7;
  const completed=state.sessions.filter(s=>s.done).length;
  const todays=state.sessions.filter(s=>s.date===today());

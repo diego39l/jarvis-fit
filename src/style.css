@@ -122,3 +122,6 @@ nav button.active{background:#103656;color:#2ad1ff}
 .evoRecords span{display:block;color:#a7c6df;font-size:12px}
 .evoRecords strong{display:block;font-size:18px;margin-top:8px;overflow-wrap:anywhere}
 .evoPace{font-size:26px;color:#37cafa}
+
+
+.recordsPremium{display:grid;gap:15px}.recordEntry{display:flex;align-items:center;gap:15px;background:linear-gradient(130deg,#153354,#10243e);border:1px solid #2b5480;border-radius:14px;padding:15px;margin:9px 0}.recordMedal{font-size:30px}.recordEntry strong,.recordEntry b,.recordEntry small{display:block}.recordEntry strong{font-size:14px}.recordEntry b{font-size:23px;margin:3px 0}.recordEntry small{color:#bbd6ec}.recordsLegend{display:flex;justify-content:center;gap:24px;font-size:12px;color:#b8d1e9}.recordsChart{width:100%;height:auto;display:block;margin:12px 0}nav{overflow-x:auto}nav button{min-width:60px}

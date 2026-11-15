@@ -45,3 +45,8 @@ nav button.active{background:#24352b}
 .activityItem svg{flex-shrink:0;color:#a8ef63}
 .secondary{display:block;width:100%;border:1px solid #526578;background:#25354a;color:#e9f0f8;border-radius:10px;padding:12px;margin-top:16px;font-weight:700}
 @media(max-width:380px){.homeMetrics{grid-template-columns:1fr 1fr}.homeMetrics>div:last-child{grid-column:1/-1}.homeMetrics span{min-height:0}}
+
+.historyFilters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}
+.historyFilters label{display:grid;gap:7px;color:#b9c8d7;font-size:12px}
+.historyFilters .historySearch{grid-column:1/-1}
+.historyFilters select,.historyFilters input{width:100%;min-width:0;background:#101a29;border:1px solid #40546b;color:#fff;border-radius:9px;padding:11px}

@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
-  base: '/jarvis-fit/',
+  base: '/',
   plugins: [VitePWA({
     registerType: 'autoUpdate',
     includeAssets: ['icon.svg'],
@@ -12,9 +12,9 @@ export default defineConfig({
       theme_color: '#101827',
       background_color: '#101827',
       display: 'standalone',
-      scope: '/jarvis-fit/',
-      start_url: '/jarvis-fit/',
-      icons: [{src:'/jarvis-fit/icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any maskable'}]
+      scope: '/',
+      start_url: '/',
+      icons: [{src:'/icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any maskable'}]
     }
   })]
 });

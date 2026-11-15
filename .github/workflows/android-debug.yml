@@ -2,6 +2,8 @@ name: Android GPS debug APK
 on:
   push:
     branches: [feat/jarvis-fit-v1-3]
+  pull_request:
+    branches: [feat/pwa-initial]
   workflow_dispatch:
 jobs:
   android-debug:
@@ -23,7 +25,9 @@ jobs:
         with:
           gradle-version: '8.9'
       - name: Build debug APK
-        run: gradle --no-daemon :app:assembleDebug
+        run: gradle --no-daemon --stacktrace --info :app:assembleDebug
+      - name: Verify APK output
+        run: test -s app/build/outputs/apk/debug/app-debug.apk
       - uses: actions/upload-artifact@v4
         with:
           name: jarvis-fit-gps-debug
